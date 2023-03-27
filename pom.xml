@@ -9,7 +9,7 @@
   <scm>
     <url>https://github.com/JeremyMcCormick/maven-test-project</url>
     <connection>scm:git:git://github.com/JeremyMcCormick/maven-test-project.git</connection>
-    <developerConnection>scm:git:git://github.com/JeremyMcCormick/maven-test-project.git<</developerConnection>
+    <developerConnection>scm:git:git://github.com/JeremyMcCormick/maven-test-project.git</developerConnection>
   </scm>
   <properties>
     <project.scm.id>github</project.scm.id>
