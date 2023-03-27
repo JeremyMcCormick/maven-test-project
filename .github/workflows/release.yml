@@ -1,12 +1,15 @@
 name: test release
-on: 
+on:
   release:
     types: [published]
 
 jobs:
   release:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
     steps:
+      - name: Dump GitHub Context
+        run: echo '${{ toJSON(github) }}'
+
       - name: Checkout HPS Java Source Code
         uses: actions/checkout@v2
         with:
@@ -23,11 +26,10 @@ jobs:
           git config user.name "GitHub Actions"
 
       - name: Cut HPS Java Release
-        run: mvn release:prepare release:perform -B -s .maven_settings.xml 
+        run: mvn release:prepare release:perform -B -s .maven_settings.xml
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ github.token }}
-      
-# -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
+#-DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
