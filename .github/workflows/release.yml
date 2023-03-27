@@ -20,7 +20,6 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'oracle'
           java-version: '8'
           
       - name: Checkout Code
