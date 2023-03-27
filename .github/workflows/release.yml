@@ -9,8 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Dump env
+      - name: Dump Shell Environment
         run: env | sort
+
+      - name: Dump GitHub Context
+        run: echo '${{ toJSON(github) }}'
 
       - name: Print Release Information
         env:
@@ -24,13 +27,27 @@ jobs:
           distribution: 'adopt'
           architecture: x64
            
+      - name: Setup Maven
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.9.0
+
       - name: Checkout Code
         uses: actions/checkout@v2
         
       - name: Run tests
-        uses: qcastel/github-actions-maven-cmd@master
+        run: mvn clean install
+
+      - name: Perform Release
         with:
-          maven-args: "clean install"
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mvn release:clean release:prepare release:perform \
+            -Dresume=false -DskipTests -Darguments="-DskipTests -Dmaven.javadoc.skip=true" 
+ 
+#         - name: Release
+#      uses: qcastel/github-actions-maven-release@v1.12.39
+#      with:
 #      
 # release:clean release:prepare release:perform -Dresume=false -Dgoals=deploy -DskipTests 
 # -Darguments="-DskipTests -Dmaven.javadoc.skip=true" -s /nfs/slac/g/lcd/mc/prj/sw/hudson/hudson-settings-lcd.xml
