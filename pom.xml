@@ -11,6 +11,9 @@
     <connection>scm:git:git://github.com/JeremyMcCormick/maven-test-project.git</connection>
     <developerConnection>scm:git:git@github.com:JeremyMcCormick/maven-test-project.git</developerConnection>
   </scm>
+  <properties>
+    <project.scm.id>github</project.scm.id>
+  </properties>
   <build>
     <defaultGoal>install</defaultGoal>
     <plugins>
@@ -53,4 +56,18 @@
       </plugin>
     </plugins>
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>lcsim.deployment</id>
+      <name>LCSIM Releases maven repository</name>
+      <url>https://srs.slac.stanford.edu/nexus/content/repositories/lcsim-maven2-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>lcsim.deployment</id>
+      <name>LCSIM Snapshots maven repository</name>
+      <url>https://srs.slac.stanford.edu/nexus/content/repositories/lcsim-maven2-snapshot/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 </project>
