@@ -1,18 +1,24 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>maven-git-test</artifactId>
-  <groupId>com.devswarm</groupId>
+  <artifactId>maven-test-project</artifactId>
+  <groupId>org.hps</groupId>
   <version>1.0.1-SNAPSHOT</version>
+
   <scm>
     <url>git@github.com:JeremyMcCormick/maven-test-project.git</url>
     <connection>scm:git:${project.scm.url}</connection>
     <developerConnection>scm:git:${project.scm.url}</developerConnection>
     <tag>HEAD</tag>
   </scm>
+
   <properties>
     <project.scm.id>github</project.scm.id>
   </properties>
+
   <build>
     <defaultGoal>install</defaultGoal>
     <plugins>
@@ -60,9 +66,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
         <version>3.1.1</version>
-        <!--        <configuration>
-          <skip>true</skip>
-        </configuration> -->
       </plugin>
     </plugins>
   </build>
