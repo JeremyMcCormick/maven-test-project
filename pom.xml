@@ -5,13 +5,13 @@
 
   <artifactId>maven-test-project</artifactId>
   <groupId>org.hps</groupId>
-  <version>1.0.4</version>
+  <version>1.0.5-SNAPSHOT</version>
 
   <scm>
     <url>git@github.com:JeremyMcCormick/maven-test-project.git</url>
     <connection>scm:git:${project.scm.url}</connection>
     <developerConnection>scm:git:${project.scm.url}</developerConnection>
-    <tag>maven-test-project-1.0.4</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
