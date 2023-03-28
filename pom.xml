@@ -51,7 +51,7 @@
               <transformers>
                 <transformer
                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.devswarm.Hello</mainClass>
+                  <mainClass>com.hps.Hello</mainClass>
                 </transformer>
               </transformers>
             </configuration>
