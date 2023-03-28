@@ -29,7 +29,7 @@ jobs:
           git config user.name "JeremyMcCormick"
 
       - name: Cut HPS Java Release
-        run: mvn release:prepare release:perform -B -e -X -s .maven_settings.xml
+        run: mvn release:prepare release:perform -B -e -s .maven_settings.xml
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
