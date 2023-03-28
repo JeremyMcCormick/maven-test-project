@@ -83,6 +83,6 @@ The release itself within Github needs to be made manually by selecting the tag 
 
 TODO List
 
-- Change the trigger to something sensible like tags which match `releases/**` or `v**`.
+- Change the trigger to something sensible like tags which match `'releases/**'` or `'v**'`.
 - The bin jar should be automatically attached to the release by downloading it from Nexus in a post-release workflow.
 - Build and deploy the project website to gh pages.
