@@ -2,19 +2,19 @@ name: HPS Java Release
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - "releases/**"
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout HPS Java Source Code
+      - name: Checkout source code
         uses: actions/checkout@v2
         with:
           ref: master
 
-      - name: Get Maven release version from POM
+      - name: Set Maven release version from POM
         run: echo "MAVEN_RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed s/-SNAPSHOT//g)" >> $GITHUB_ENV
 
       - name: Print Maven release version
@@ -44,10 +44,10 @@ jobs:
         id: github_release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.event.repository.name }}-$MAVEN_RELEASE_VERSION
-          name: ${{ github.event.repository.name }} $MAVEN_RELEASE_VERSION Release
+          tag_name: ${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}
+          name: ${{ github.event.repository.name }} ${{ env.MAVEN_RELEASE_VERSION }} Release
           generate_release_notes: true
           draft: false
           prerelease: false
           files: |
-            ./target/${{ github.event.repository.name }}-$MAVEN_RELEASE_VERSION-bin.jar
+            ./target/${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}-bin.jar
