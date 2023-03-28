@@ -1,4 +1,4 @@
-package com.devswarm;
+package org.hps;
 
 public class HelloTest {
     
