@@ -131,7 +131,9 @@ This local tag then needs to be pushed to Github to trigger the release workflow
 git push origin releases/reltest1
 ```
 
-Only the project release manager should push tags to trigger releases. 
+Only the project release manager should push tags to trigger releases. The tags should probably also only be made from an up-to-date copy of the "master" branch.
+
+The procedures for creating and pushing tags, as well as performing sanity checks, could be automated by using a script.
 
 ## TODO List
 
