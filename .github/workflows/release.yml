@@ -5,17 +5,10 @@ on:
     branches:
       - master
 
-#on:
-#  release:
-#    types: [published]
-
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      #- name: Dump GitHub Context
-      #  run: echo '${{ toJSON(github) }}'
-
       - name: Checkout HPS Java Source Code
         uses: actions/checkout@v2
         with:
