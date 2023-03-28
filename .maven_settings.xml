@@ -8,31 +8,6 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <repositories>
-                <repository>
-                    <id>lcsim-repo-releases</id>
-                    <name>LCSIM Releases maven repository</name>
-                    <url>https://srs.slac.stanford.edu/nexus/content/repositories/lcsim-maven2-releases/</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                </repository>
-                <snapshotRepository>
-                    <id>lcsim-repo-snapshots</id>
-                    <name>LCSIM Snapshots maven repository</name>
-                    <url>
-                        https://srs.slac.stanford.edu/nexus/content/repositories/lcsim-maven2-snapshot/</url>
-                    <releases>
-                        <enabled>false</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </snapshotRepository>
-            </repositories>
         </profile>
     </profiles>
     <activeProfiles>
