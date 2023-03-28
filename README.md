@@ -135,7 +135,7 @@ Only the project release manager should push tags to trigger releases.
 
 ## TODO List
 
-- Build and deploy the project website to gh pages.
-- Add option to turn tests or javadoc on/off via Maven args: `-DskipTests=${{ env.SKIP_TESTS }} -Darguments="-DskipTests=${{ env.SKIP_TESTS }} -Dmaven.javadoc.skip=${{ env.SKIP_JAVADOC }}` 
-- Provide options for incrementing the major/minor/patch versions using workflow input arguments (this seems to need a "manually triggered workflow" though according to the GH docs).
-- Slack integration that notifies when releases are performed.
+- Build and deploy the project website to gh pages (probably fine to just have a "current" version there rather than organize by release numbers).
+- Add options for turning off tests or javadoc via Maven args: `-DskipTests=${{ env.SKIP_TESTS }} -Darguments="-DskipTests=${{ env.SKIP_TESTS }} -Dmaven.javadoc.skip=${{ env.SKIP_JAVADOC }}"`
+- Provide options for incrementing the major/minor/patch versions using workflow input arguments (this seems to require a "manually triggered workflow" though according to the GH docs so it may be nontrivial to implement).
+- Add slack integration that notifies when releases are performed.
