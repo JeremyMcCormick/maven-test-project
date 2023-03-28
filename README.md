@@ -1,5 +1,4 @@
-# maven-test-project
-Maven test project
+# Maven Test Project
 
 This project includes a workflow defined in `.github/workflows/release.yml` for releasing a Maven project using Github Actions. 
 
@@ -8,6 +7,23 @@ An SSH key was created using this command:
 ```
 ssh-keygen -b 2048 -t rsa -f id_rsa -q -N "" -C "git@github.com:JeremyMcCormick/maven-test-project.git"
 ```
+
+The SCM is defined in the project's POM file as follows:
+
+```
+<scm>
+    <url>git@github.com:JeremyMcCormick/maven-test-project.git</url>
+    <connection>scm:git:${project.scm.url}</connection>
+    <developerConnection>scm:git:${project.scm.url}</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <project.scm.id>github</project.scm.id>
+  </properties>
+```
+
+(Not sure if the property setting is needed???)
 
 The public key was then added as a deployment key (under Settings -> Deploy keys in the project) called `SSH_PUBLIC_KEY`. A corresponding repository secret containing the private key was added as `SSH_PRIVATE_KEY`. The private key is then setup in the workflow using the following step:
 
@@ -55,6 +71,18 @@ The `CI_DEPLOY_USERNAME` and `CI_DEPLOY_PASSWORD` are respectively the username 
 </servers>
 ```
 
-For demonstration purposes, the release triggers on any update to the `master` branch. This can be configured to trigger on any pattern or string (e.g. `releases/**` for production). A tag is created in the repository for the release e.g. `maven-git-test-1.0.0`. The patch version in the project's `pom.xml` is automatically updated (1.0.0 -> 1.0.1-SNAPSHOT).
+For demonstration purposes, the release triggers on any update to the `master` branch. This can be configured to trigger on any pattern or string (e.g. `releases/**` for production). A tag is created in the repository for the release e.g. `maven-git-test-1.0.0`. The patch version in the project's `pom.xml` is automatically updated (1.0.0 -> 1.0.1-SNAPSHOT). 
+
+The bin jar file should be uploaded to Nexus and accessible via a public URL like:
+
+```
+https://srs.slac.stanford.edu/nexus/repository/lcsim-maven2-releases/org/hps/maven-test-project/1.0.2/maven-test-project-1.0.2-bin.jar
+```
 
 The release itself within Github needs to be made manually by selecting the tag that was created in the dropdown.
+
+TODO List
+
+- Change the trigger to something sensible like tags which match `'releases/**'` or `'v**'`.
+- The bin jar should be automatically attached to the release by downloading it from Nexus in a post-release workflow.
+- Build and deploy the project website to gh pages.
