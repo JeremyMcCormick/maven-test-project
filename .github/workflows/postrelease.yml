@@ -1,0 +1,21 @@
+name: HPS Java Post Release
+on:
+  release:
+    types: [published]
+
+jobs:
+  attach-bin-jar:
+    name: Attach the HPS Java bin JAR to a release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout HPS Java Source Code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{github.ref_name}}
+#      - name: Upload Release Asset
+#        env:mvn
+#          TAG_NAME: ${{github.ref_name}}
+#        run: gh release upload <release_tag> <a_file>
