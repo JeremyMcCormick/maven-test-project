@@ -34,18 +34,18 @@ jobs:
           git config user.email "jermccormick@gmail.com"
           git config user.name "JeremyMcCormick"
 
-      - name: Cut HPS Java Release
+      - name: Perform Maven release
         run: mvn release:prepare release:perform -B -e -s .maven_settings.xml
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
 
-      - name: Create Github release
+      - name: Make Github release
         id: github_release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}
-          name: ${{ github.event.repository.name }} ${{ env.MAVEN_RELEASE_VERSION }} Release
+          name: ${{ github.event.repository.name }} ${{ env.MAVEN_RELEASE_VERSION }}
           generate_release_notes: true
           draft: false
           prerelease: false
