@@ -8,6 +8,23 @@ An SSH key was created using this command:
 ssh-keygen -b 2048 -t rsa -f id_rsa -q -N "" -C "git@github.com:JeremyMcCormick/maven-test-project.git"
 ```
 
+The SCM is defined in the project's POM file as follows:
+
+```
+<scm>
+    <url>git@github.com:JeremyMcCormick/maven-test-project.git</url>
+    <connection>scm:git:${project.scm.url}</connection>
+    <developerConnection>scm:git:${project.scm.url}</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <project.scm.id>github</project.scm.id>
+  </properties>
+```
+
+(Not sure if the property setting is needed???)
+
 The public key was then added as a deployment key (under Settings -> Deploy keys in the project) called `SSH_PUBLIC_KEY`. A corresponding repository secret containing the private key was added as `SSH_PRIVATE_KEY`. The private key is then setup in the workflow using the following step:
 
 ```
