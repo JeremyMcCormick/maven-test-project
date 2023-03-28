@@ -1,5 +1,4 @@
-# maven-test-project
-Maven test project
+# Maven Test Project
 
 This project includes a workflow defined in `.github/workflows/release.yml` for releasing a Maven project using Github Actions. 
 
@@ -55,6 +54,14 @@ The `CI_DEPLOY_USERNAME` and `CI_DEPLOY_PASSWORD` are respectively the username 
 </servers>
 ```
 
-For demonstration purposes, the release triggers on any update to the `master` branch. This can be configured to trigger on any pattern or string (e.g. `releases/**` for production). A tag is created in the repository for the release e.g. `maven-git-test-1.0.0`. The patch version in the project's `pom.xml` is automatically updated (1.0.0 -> 1.0.1-SNAPSHOT).
+For demonstration purposes, the release triggers on any update to the `master` branch. This can be configured to trigger on any pattern or string (e.g. `releases/**` for production). A tag is created in the repository for the release e.g. `maven-git-test-1.0.0`. The patch version in the project's `pom.xml` is automatically updated (1.0.0 -> 1.0.1-SNAPSHOT). 
+
+The bin jar file should be uploaded to Nexus and accessible via a public URL like:
+
+```
+https://srs.slac.stanford.edu/nexus/repository/lcsim-maven2-releases/org/hps/maven-test-project/1.0.2/maven-test-project-1.0.2-bin.jar
+```
 
 The release itself within Github needs to be made manually by selecting the tag that was created in the dropdown.
+
+TODO: The bin jar should be automatically attached to the release by downloading it from Nexus in a post-release workflow.
