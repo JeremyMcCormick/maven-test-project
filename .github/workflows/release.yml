@@ -2,10 +2,8 @@ name: HPS Java Release
 
 on:
   push:
-    tags:
-      - "v**"
-#    branches:
-#      - master
+    branches:
+      - master
 
 jobs:
   release:
