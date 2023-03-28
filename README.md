@@ -105,7 +105,7 @@ Finally, the Github release is made as follows:
       ./target/${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}-bin.jar
 ```
 
-An example release can be found [https://github.com/JeremyMcCormick/maven-test-project/releases/tag/maven-test-project-1.0.15](here).
+An example release can be found [here](https://github.com/JeremyMcCormick/maven-test-project/releases/tag/maven-test-project-1.0.15). Notice that it includes automatically generated release notes based on merged PRs, as well as a copy of the bin jar.
 
 ## Triggering a Release
 
@@ -119,13 +119,13 @@ For instance, all of these would be valid tags:
 
 The release tag itself is only used for checking out the correct version of the source code, so it does not need to follow any specific naming convention. The actual versioned tags for the release are created by Maven based on information in the POM file. For instance, if the POM file contained "1.0.0-SNAPSHOT" then the tag for the release would be called "maven-test-project-1.0.0" and the development (snapshot) version would be incremented to "1.0.1-SNAPSHOT" automatically. Major and minor tags should be incremented manually by updating the POM file.
 
-This is an example of creating a tag locally:
+This is an example of creating a release tag locally:
 
 ```
 git tag -a releases/reltest1 -m "rel test 1"
 ```
 
-The local tag then needs to be pushed to trigger the release:
+This tag then needs to be pushed to Github in order to trigger the release:
 
 ```
 git push origin releases/reltest1
