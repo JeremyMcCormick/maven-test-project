@@ -81,4 +81,7 @@ https://srs.slac.stanford.edu/nexus/repository/lcsim-maven2-releases/org/hps/mav
 
 The release itself within Github needs to be made manually by selecting the tag that was created in the dropdown.
 
-TODO: The bin jar should be automatically attached to the release by downloading it from Nexus in a post-release workflow.
+TODO List
+
+- The bin jar should be automatically attached to the release by downloading it from Nexus in a post-release workflow.
+- Build and deploy the project website to gh pages.
