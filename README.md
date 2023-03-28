@@ -26,8 +26,8 @@ The public key was added as the deployment key called `SSH_PUBLIC_KEY` under _Se
 
 ```
 - uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  with:
+    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 ```
 
 This deployment key pair should _not_ be reused for any other projects.
@@ -36,12 +36,12 @@ The Github user for signing commits during the release is configured as follows:
 
 ```
 - name: Configure Git User
-        run: |
-          git config user.email "jermccormick@gmail.com"
-          git config user.name "JeremyMcCormick"
+  run: |
+    git config user.email "jermccormick@gmail.com"
+    git config user.name "JeremyMcCormick"
 ```
 
-It should be possible to set this to any Github username and email.
+This can be set to any Github username and email.
 
 The source control management (SCM) information is defined in the project's POM file as follows:
 
@@ -51,14 +51,14 @@ The source control management (SCM) information is defined in the project's POM 
     <connection>scm:git:${project.scm.url}</connection>
     <developerConnection>scm:git:${project.scm.url}</developerConnection>
     <tag>HEAD</tag>
-  </scm>
+</scm>
 
-  <properties>
+<properties>
     <project.scm.id>github</project.scm.id>
-  </properties>
+</properties>
 ```
 
-(Not sure if the property setting is needed???)
+(Not sure if the property setting is actually needed???)
 
 ## Release Workflow
 
@@ -105,33 +105,33 @@ Finally, the Github release is made as follows:
       ./target/${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}-bin.jar
 ```
 
-An example release can be found [here](https://github.com/JeremyMcCormick/maven-test-project/releases/tag/maven-test-project-1.0.15). Notice that it includes automatically generated release notes based on merged PRs, as well as a copy of the bin jar.
+An example release can be found [here](https://github.com/JeremyMcCormick/maven-test-project/releases/tag/maven-test-project-1.0.15). Notice that it includes automatically generated release notes based on merged PRs, as well as a copy of the bin jar that can be downloaded and run.
 
 ## Triggering a Release
 
 The release process is triggered by pushing a tag that starts with "releases/" to the Github repository.
 
-For instance, all of these would be valid tags:
+For instance, all of these would be valid tag names:
 
 - releases/reltest1
-- releases/prod2023
+- releases/mc_prod_2023
 - releases/v1.2.3
 
-The release tag itself is only used for checking out the correct version of the source code, so it does not need to follow any specific naming convention. The actual versioned tags for the release are created by Maven based on information in the POM file. For instance, if the POM file contained "1.0.0-SNAPSHOT" then the tag for the release would be called "maven-test-project-1.0.0" and the development (snapshot) version would be incremented to "1.0.1-SNAPSHOT" automatically. Major and minor tags should be incremented manually by updating the POM file.
+The release tag itself is only used for checking out the correct version of the source code, so it does not need to follow any specific naming convention. The actual versioned tags for the release are created by Maven based on information in the POM file. For instance, if the POM file contained "1.0.0-SNAPSHOT" when the tag was pushed, then the actual tag for the release would be called "maven-test-project-1.0.0" and the development (snapshot) version would be incremented to "1.0.1-SNAPSHOT" automatically. Major and minor tags should be incremented manually for now by updating the POM file.
 
-This is an example of creating a release tag locally:
+This is an example command for creating a release tag locally:
 
 ```
 git tag -a releases/reltest1 -m "rel test 1"
 ```
 
-This tag then needs to be pushed to Github in order to trigger the release:
+This local tag then needs to be pushed to Github to trigger the release workflow:
 
 ```
 git push origin releases/reltest1
 ```
 
-Only the project release manager should push tags to trigger the release workflow.
+Only the project release manager should push tags to trigger releases. 
 
 ## TODO List
 
