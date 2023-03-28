@@ -1,4 +1,4 @@
-package com.hps;
+package org.hps;
 
 import java.util.Arrays;
 
