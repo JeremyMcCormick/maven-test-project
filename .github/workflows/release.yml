@@ -14,7 +14,7 @@ jobs:
         with:
           ref: master
 
-      - name: Get release version from the snapshot in the POM
+      - name: Get Maven release version from POM
         run: echo "MAVEN_RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed s/-SNAPSHOT//g)" >> $GITHUB_ENV
 
       - name: Print Maven release version
@@ -39,3 +39,15 @@ jobs:
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
+
+      - name: Create Github release
+        id: github_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.repository.name }}-$MAVEN_RELEASE_VERSION
+          name: ${{ github.event.repository.name }} $MAVEN_RELEASE_VERSION Release
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          files: |
+            ./target/${{ github.event.repository.name }}-$MAVEN_RELEASE_VERSION-bin.jar
