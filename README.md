@@ -142,3 +142,4 @@ The procedures for creating and pushing tags, as well as performing sanity check
 - Provide options for incrementing the major/minor/patch versions using workflow input arguments (this seems to require a "manually triggered workflow" though according to the GH docs so it may be nontrivial to implement).
 - Add slack integration that notifies when releases are performed.
 - Consider using a manually triggered workflow for the release as described [here](https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow)
+- Add additional workflows for manual deployment, deployment on any push to master, and running tests on PR as found in [this project](https://github.com/wocommunity/wonder/tree/master/.github/workflows)
