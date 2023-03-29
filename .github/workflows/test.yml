@@ -1,4 +1,4 @@
-name: Build Maven project with tests
+name: Test
 
 on:
   workflow_dispatch:
