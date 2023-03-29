@@ -1,4 +1,4 @@
-name: Release a Maven Project
+name: Release
 
 on:
   workflow_dispatch:
@@ -28,21 +28,18 @@ jobs:
       - name: Create version file
         run: touch .maven_version
 
-      - if: inputs.release_version != 'auto'
+      - name: Set input release version
+        if: inputs.release_version != 'auto'
         run: |
           echo -n "-DreleaseVersion=${{ inputs.release_version }}" >> .maven_version
           echo "MAVEN_RELEASE_VERSION=${{ inputs.release_version }}" >> $GITHUB_ENV
 
-      # FIXME
-      # Best way to do this would be getting properties from the POM as in:
-      # https://www.mojohaus.org/build-helper-maven-plugin/parse-version-mojo.html
-      #
-      # Then use echo plugin to print them out:
-      # https://www.baeldung.com/maven-print-message-during-execution
-      - if: inputs.release_version == 'auto'
+      - name: Set default input release version
+        if: inputs.release_version == 'auto'
         run: echo "MAVEN_RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed s/-SNAPSHOT//g)" >> $GITHUB_ENV
 
-      - if: inputs.development_version != 'auto'
+      - name: Set input development version
+        if: inputs.development_version != 'auto'
         run: |
           echo "-DdevelopmentVersion=${{ inputs.development_version }}" >> .maven_version
 
