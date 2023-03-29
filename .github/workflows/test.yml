@@ -28,11 +28,6 @@ on:
         type: boolean
         default: true
         description: Produce execution error messages
-      log-file:
-        required: false
-        type: string
-        default: ""
-        description: Log file to save output
 
 jobs:
   test:
@@ -49,6 +44,9 @@ jobs:
         with:
           java-version: ${{ inputs.java-version }}
 
+      - name: Create .maven_args
+        run: touch .maven_args
+
       - name: Set Maven quiet
         run: echo -n "-q" >> .maven_args
         if: inputs.quiet
@@ -61,12 +59,14 @@ jobs:
         run: echo -n " -e" >> .maven_args
         if: inputs.errors
 
-      - name: Set Maven log file
+      - name: Set MAVEN_ARGS in environment
         run: |
-          mkdir -p $(dirname output/logs/${{ inputs.log-file }}) 
-          echo -n "-l ./output/logs/${{ inputs.log-file }}" >> .maven_args
-        if: inputs.log-file != ''
+          echo "MAVEN_ARGS=$(cat .maven_args)" >> $GITHUB_ENV
+          rm .maven_args
+
+      - name: Print Maven args
+        run: echo ${{ env.MAVEN_ARGS }}
 
       - name: Run tests
         run: |
-          mvn -B install -T${{ inputs.nthreads }} $(cat .maven_args)
+          mvn -B install -T${{ inputs.nthreads }} ${{ env.MAVEN_ARGS }}
