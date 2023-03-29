@@ -8,6 +8,8 @@
   <artifactId>maven-test-project</artifactId>
   <groupId>org.hps</groupId>
   <version>1.0.27-SNAPSHOT</version>
+  <url>https://github.com/JeremyMcCormick/maven-test-project</url>
+  <description>This is an example Maven project including Github actions, site deployment in gh-pages, and what not.</description>
 
   <scm>
     <url>git@github.com:JeremyMcCormick/maven-test-project.git</url>
