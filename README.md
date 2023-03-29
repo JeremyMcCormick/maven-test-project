@@ -143,3 +143,4 @@ The procedures for creating and pushing tags, as well as performing sanity check
 - Add slack integration that notifies when releases are performed.
 - Consider using a manually triggered workflow for the release as described [here](https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow)
 - Add additional workflows for manual deployment, deployment on any push to master, and running tests on PR as found in [this project](https://github.com/wocommunity/wonder/tree/master/.github/workflows)
+- Additional ideas for configuration options can be found in [this project](https://github.com/qcastel/github-actions-maven-release).
