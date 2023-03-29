@@ -53,16 +53,18 @@ jobs:
         run: |
           echo "MAVEN_ARGS=" >> $GITHUB_ENV
 
-      - run: echo "MAVEN_ARGS=\"${{ env.MAVEN_ARGS}} -q\"" >> $GITHUB_ENV
+      - name: Set Maven quiet
+        run: echo "MAVEN_ARGS=${{ env.MAVEN_ARGS}}\ -q" >> $GITHUB_ENV
         if: inputs.quiet
 
-      - run: echo "MAVEN_ARGS=\"${{ env.MAVEN_ARGS}} -X\"" >> $GITHUB_ENV
+      - name: Set Maven debug
+        run: echo "MAVEN_ARGS=${{ env.MAVEN_ARGS}}\ -X" >> $GITHUB_ENV
         if: inputs.debug
 
-      - run: echo "MAVEN_ARGS=\"${{ env.MAVEN_ARGS}} -e\"" >> $GITHUB_ENV
+      - run: echo "MAVEN_ARGS=${{ env.MAVEN_ARGS}}\ -e" >> $GITHUB_ENV
         if: inputs.errors
 
-      - run: echo "MAVEN_ARGS=\"${{ env.MAVEN_ARGS}} -l${{ inputs.log-file }}\"" >> $GITHUB_ENV
+      - run: echo "MAVEN_ARGS=${{ env.MAVEN_ARGS}}\ -l${{ inputs.log-file }}" >> $GITHUB_ENV
         if: inputs.log-file != ''
 
       - name: Run tests
