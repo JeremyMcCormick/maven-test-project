@@ -9,6 +9,10 @@ on:
         required: true
         type: string
         default: master
+      nthreads:
+        required: true
+        type: int
+        default: 4
 
 jobs:
   setup:
@@ -23,3 +27,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ inputs.java-version }}
+
+      - name: Build Maven project
+        run: mvn clean install -DskipTests -T${{ inputs.nthreads }}
