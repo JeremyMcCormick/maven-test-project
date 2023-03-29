@@ -1,7 +1,12 @@
 name: Run Maven project tests
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    branch-name:
+          required: true
+          type: string
+          default: master
+          description: Branch name to checkout
     
 jobs:
   test:
@@ -9,8 +14,9 @@ jobs:
     steps:
       - name: Setup Maven Project
         uses: ./.github/actions/setup
-        secrets: inherit
-
+        with:
+          branch-name: ${{ inputs.branch-name }}
+        
       - name: Run tests
         run: mvn install
     
