@@ -1,44 +1,50 @@
-name: Maven Test Project Release
+name: Release a Maven Project
 
 on:
-  push:
-    tags:
-      - "releases/**"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "The branch to checkout when cutting the release."
+        required: true
+        default: "master"
+      release_version:
+        description: "Default version to use when preparing a release."
+        required: true
+        default: "auto"
+      development_version:
+        description: "Default version to use for new local working copy."
+        required: true
+        default: "auto"
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Print release tag
-        env:
-          REF_NAME: ${{ github.ref_name }}
-        run: echo "$REF_NAME"
-
       - name: Checkout source code
         uses: actions/checkout@v2
         with:
-          ref: master
+          ref: ${{ inputs.branch }}
 
-      # We need to check that the tag and master are exactly the same using diff, 
-      # since pushing the release tag just triggers the build. The tag is not used
-      # directly, because Maven always wants to use master. This is basically a sanity 
-      # check that master looks releasable.
-      - name: Check release tag
+      - name: Create version file
+        run: touch .maven_version
+
+      - if: inputs.release_version != 'auto'
         run: |
-          git fetch origin --tags && git checkout tags/${{ github.ref_name }}
-          if [ ! -z "$(git --no-pager diff master)" ]; then 
-            echo "ERROR: master and tag ${{ github.ref_name }} have diverged!"; 
-            git --no-pager diff ${{ github.ref_name }}
-            exit 1
-          fi
-          git checkout master
+          echo -n "-DreleaseVersion=${{ inputs.release_version }}" >> .maven_version
+          echo "MAVEN_RELEASE_VERSION=${{ inputs.release_version }}" >> $GITHUB_ENV
 
-      - name: Set Maven release version from POM
+      # FIXME
+      # Best way to do this would be getting properties from the POM as in:
+      # https://www.mojohaus.org/build-helper-maven-plugin/parse-version-mojo.html
+      #
+      # Then use echo plugin to print them out:
+      # https://www.baeldung.com/maven-print-message-during-execution
+      - if: inputs.release_version == 'auto'
         run: echo "MAVEN_RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed s/-SNAPSHOT//g)" >> $GITHUB_ENV
 
-      - name: Print Maven release version
-        run: echo "$MAVEN_RELEASE_VERSION"
+      - if: inputs.development_version != 'auto'
+        run: |
+          echo "-DdevelopmentVersion=${{ inputs.development_version }}" >> .maven_version
 
       - uses: webfactory/ssh-agent@v0.7.0
         with:
@@ -49,13 +55,21 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Configure Git User
+      - name: Get email
+        id: get_email
+        uses: evvanErb/get-github-email-by-username-action@v1.25
+        with:
+          github-username: ${{ github.actor }}
+
+      - name: Configure Git user
         run: |
-          git config user.email "jermccormick@gmail.com"
-          git config user.name "JeremyMcCormick"
+          git config user.email "${{ steps.get_email.outputs.email }}"
+          git config user.name "${{ github.actor }}"
+          echo "Username: ${{ github.actor }}"
+          echo "Email: ${{ steps.get_email.outputs.email }}"
 
       - name: Perform Maven release
-        run: mvn release:prepare release:perform -B -e -s .maven_settings.xml
+        run: mvn release:prepare release:perform -B -e -s .maven_settings.xml $(cat .maven_version)
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
