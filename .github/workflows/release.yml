@@ -18,7 +18,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
         with:
-          ref: ${{github.ref_name}}
+          ref: master
+
+      - name: Check git status
+        run: git status
 
       - name: Set Maven release version from POM
         run: echo "MAVEN_RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed s/-SNAPSHOT//g)" >> $GITHUB_ENV
