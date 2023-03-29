@@ -58,7 +58,7 @@ jobs:
         if: inputs.quiet
 
       - name: Set Maven debug
-        run: echo "MAVEN_ARGS=${{ env.MAVEN_ARGS}}\ -X" >> $GITHUB_ENls bl  V
+        run: echo "MAVEN_ARGS=${{ env.MAVEN_ARGS}}\ -X" >> $GITHUB_ENV
         if: inputs.debug
 
       - name: Set Maven errors
