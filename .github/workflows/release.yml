@@ -1,4 +1,4 @@
-name: HPS Java Release
+name: Maven Test Project Release
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - name: Check release tag
         run: |
           git fetch origin --tags && git checkout tags/${{ github.ref_name }}
-          if [ ! -z "$(git --no-pager diff master" ]; then 
+          if [ ! -z "$(git --no-pager diff master)" ]; then 
             echo "ERROR: master and tag ${{ github.ref_name }} have diverged!"; 
             git --no-pager diff ${{ github.ref_name }}
             exit 1
