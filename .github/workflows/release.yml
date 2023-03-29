@@ -26,12 +26,13 @@ jobs:
       # check that master looks releasable.
       - name: Check release tag
         run: |
-          git fetch origin ${{ github.ref_name }}
-          if [ ! -z "$(git --no-pager diff ${{ github.ref_name }})" ]; then 
+          git fetch remote && git checkout tags/${{ github.ref_name }}
+          if [ ! -z "$(git --no-pager diff master" ]; then 
             echo "ERROR: master and ${{ github.ref_name }} have diverged!"; 
             git --no-pager diff ${{ github.ref_name }}
             exit 1
           fi
+          git checkout master
 
       - name: Set Maven release version from POM
         run: echo "MAVEN_RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed s/-SNAPSHOT//g)" >> $GITHUB_ENV
