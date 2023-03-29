@@ -1,0 +1,16 @@
+name: Run Maven project tests
+
+on:
+  workflow_call:
+    
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Maven Project
+        uses: ./.github/actions/setup
+        secrets: inherit
+
+      - name: Run tests
+        run: mvn install
+    
