@@ -5,14 +5,17 @@ on:
         required: true
         type: string
         default: 1.8
+        description: Java version
       branch-name:
         required: true
         type: string
         default: master
+        description: Branch name to checkout
       nthreads:
         required: true
         type: int
         default: 4
+        description: Number of threads for Maven build
 
 jobs:
   setup:
