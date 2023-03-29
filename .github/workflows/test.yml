@@ -1,9 +1,9 @@
-name: Run Maven project tests
+name: Build Maven project with tests
 
 on:
   workflow_dispatch:
     inputs:
-      java-version:
+      java_version:
         required: false
         type: string
         default: "1.8"
@@ -13,21 +13,11 @@ on:
         type: string
         default: "4"
         description: Number of threads for Maven build
-      quiet:
+      maven_args:
         required: false
-        type: boolean
-        default: false
-        description: Quiet output - only show errors
-      debug:
-        required: false
-        type: boolean
-        default: false
-        description: Produce execution debug output
-      errors:
-        required: false
-        type: boolean
-        default: true
-        description: Produce execution error messages
+        type: string
+        default: ""
+        description: Extra Maven arguments (e.g. -q, -X, -e, etc.)
 
 jobs:
   test:
@@ -36,37 +26,11 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Check git status
-        run: git status
-
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
-          java-version: ${{ inputs.java-version }}
+          java-version: ${{ inputs.java_version }}
 
-      - name: Create .maven_args
-        run: touch .maven_args
-
-      - name: Set Maven quiet
-        run: echo -n "-q" >> .maven_args
-        if: inputs.quiet
-
-      - name: Set Maven debug
-        run: echo -n " -X" >> .maven_args
-        if: inputs.debug
-
-      - name: Set Maven errors
-        run: echo -n " -e" >> .maven_args
-        if: inputs.errors
-
-      - name: Set MAVEN_ARGS in environment
+      - name: Build and run tests
         run: |
-          echo "MAVEN_ARGS=$(cat .maven_args)" >> $GITHUB_ENV
-          rm .maven_args
-
-      - name: Print Maven args
-        run: echo ${{ env.MAVEN_ARGS }}
-
-      - name: Run tests
-        run: |
-          mvn -B install -T${{ inputs.nthreads }} ${{ env.MAVEN_ARGS }}
+          mvn -B install -T${{ inputs.nthreads }} ${{ inputs.maven_args }}
