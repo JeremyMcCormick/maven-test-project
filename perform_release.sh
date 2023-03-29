@@ -6,20 +6,16 @@ relname=releases/$1
 
 echo ">>>> Making release: $relname"
 
-if [[ $(git tag -l "$relname") ]]; then echo "ERROR: Tag $relname already exists." && exit 1; fi
+[[ $(git tag -l "$relname") ]] && echo "ERROR: Tag $relname already exists!" && exit 1
 
 echo ">>>> Switching to master branch"
 
-git checkout master
+git checkout master && git pull origin master
 
-#echo ">>> Checking out master branch ..."
-#git stash; git fetch origin; git reset --hard origin/master
+[[ $(git diff origin/master) ]] && echo "ERROR: Local master is different from origin!" && git --no-pager diff origin/master && exit 1
 
-echo ">>>> Pulling master from origin"
-git pull origin master
-
-echo ">>>> Checking for clean master"
-if [[ ! -z "$(git status --porcelain)" ]]; then echo "ERROR: Working copy of master is not clean." && exit 1; fi
+#echo ">>>> Checking for clean master"
+#[[ ! -z "$(git status --porcelain)" ]] && echo "ERROR: Working copy of master is not clean." && exit 1
 
 echo ">>> Creating local tag"
 git tag -a $relname
