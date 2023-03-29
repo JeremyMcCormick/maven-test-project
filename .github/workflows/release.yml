@@ -20,6 +20,17 @@ jobs:
         with:
           ref: master
 
+      # We need to check that the tag and master are exactly the same, since the tag 
+      # just triggers the build and is not used directly because Maven always wants to 
+      # use master. This is basically a sanity check that master looks releasable.
+      - name: Check release tag
+        run: |
+          if [ ! -z "$(git --no-pager diff ${{ github.ref_name }})" ]; then 
+            echo "ERROR: master and ${{ github.ref_name }} have diverged!"; 
+            git --no-pager diff ${{ github.ref_name }}
+            exit 1
+          fi
+
       - name: Set Maven release version from POM
         run: echo "MAVEN_RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed s/-SNAPSHOT//g)" >> $GITHUB_ENV
 
