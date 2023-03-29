@@ -141,3 +141,4 @@ The procedures for creating and pushing tags, as well as performing sanity check
 - Add options for turning off tests or javadoc via Maven args: `-DskipTests=${{ env.SKIP_TESTS }} -Darguments="-DskipTests=${{ env.SKIP_TESTS }} -Dmaven.javadoc.skip=${{ env.SKIP_JAVADOC }}"`
 - Provide options for incrementing the major/minor/patch versions using workflow input arguments (this seems to require a "manually triggered workflow" though according to the GH docs so it may be nontrivial to implement).
 - Add slack integration that notifies when releases are performed.
+- Consider using a manually triggered workflow for the release as described [here](https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow)
