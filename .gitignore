@@ -3,3 +3,7 @@ target
 id_rsa
 id_rsa.pub
 .vscode
+*.log
+
+# This is used in github workflow for release versions.
+.maven_version
