@@ -1,5 +1,4 @@
 target
-hudson-settings-lcd.xml
 *.bak
 id_rsa
 id_rsa.pub
