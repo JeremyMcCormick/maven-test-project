@@ -1,0 +1,25 @@
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        required: true
+        type: string
+        default: 1.8
+      branch-name:
+        required: true
+        type: string
+        default: master
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.branch-name }}
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ inputs.java-version }}
