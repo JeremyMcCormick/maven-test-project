@@ -26,9 +26,9 @@ jobs:
       # check that master looks releasable.
       - name: Check release tag
         run: |
-          git fetch remote && git checkout tags/${{ github.ref_name }}
+          git fetch remote --tags && git checkout tags/${{ github.ref_name }}
           if [ ! -z "$(git --no-pager diff master" ]; then 
-            echo "ERROR: master and ${{ github.ref_name }} have diverged!"; 
+            echo "ERROR: master and tag ${{ github.ref_name }} have diverged!"; 
             git --no-pager diff ${{ github.ref_name }}
             exit 1
           fi
