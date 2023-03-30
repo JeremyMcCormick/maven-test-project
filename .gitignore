@@ -2,3 +2,8 @@ target
 *.bak
 id_rsa
 id_rsa.pub
+.vscode
+*.log
+
+# This file is used in the github workflow for managing Maven arguments.
+.maven_args

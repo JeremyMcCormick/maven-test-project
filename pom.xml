@@ -7,7 +7,7 @@
 
   <artifactId>maven-test-project</artifactId>
   <groupId>org.hps</groupId>
-  <version>1.0.27-SNAPSHOT</version>
+  <version>1.2.6-SNAPSHOT</version>
 
   <scm>
     <url>git@github.com:JeremyMcCormick/maven-test-project.git</url>
@@ -68,6 +68,9 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
         <version>3.1.1</version>
+        <configuration>
+          <retryFailedDeploymentCount>5</retryFailedDeploymentCount>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

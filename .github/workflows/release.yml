@@ -1,44 +1,86 @@
-name: Maven Test Project Release
+name: Release
 
 on:
-  push:
-    tags:
-      - "releases/**"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to use for release"
+        required: true
+        default: "master"
+      release_version:
+        description: "Release version"
+        required: true
+        default: "auto"
+      development_version:
+        description: "New development version"
+        required: true
+        default: "auto"
+      dry_run:
+        description: "Perform a dry run for testing"
+        required: false
+        type: boolean
+        default: false
+      skip_tests:
+        description: "Skip running the tests"
+        required: false
+        type: boolean
+        default: false
+      skip_javadoc:
+        description: "Skip javadoc generation"
+        required: false
+        type: boolean
+        default: true
+      quiet:
+        description: "Quiet output - only show errors"
+        required: false
+        type: boolean
+        default: false
+      generate_release_notes:
+        description: "Generate release notes"
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Print release tag
-        env:
-          REF_NAME: ${{ github.ref_name }}
-        run: echo "$REF_NAME"
+      - name: Check release version
+        if: inputs.release_version != 'auto' && inputs.development_version == 'auto'
+        run: |
+          echo "ERROR: Release version was provided but next development version was set to auto."
+          exit 1
 
       - name: Checkout source code
         uses: actions/checkout@v2
         with:
-          ref: master
+          ref: ${{ inputs.branch }}
 
-      # We need to check that the tag and master are exactly the same using diff, 
-      # since pushing the release tag just triggers the build. The tag is not used
-      # directly, because Maven always wants to use master. This is basically a sanity 
-      # check that master looks releasable.
-      - name: Check release tag
+      - name: Create Maven args file
         run: |
-          git fetch origin --tags && git checkout tags/${{ github.ref_name }}
-          if [ ! -z "$(git --no-pager diff master)" ]; then 
-            echo "ERROR: master and tag ${{ github.ref_name }} have diverged!"; 
-            git --no-pager diff ${{ github.ref_name }}
-            exit 1
-          fi
-          git checkout master
+          touch .maven_args
+          echo "MAVEN_ARGS_FILE=.maven_args" >> $GITHUB_ENV
 
-      - name: Set Maven release version from POM
+      - name: Set input release version
+        if: inputs.release_version != 'auto'
+        run: |
+          echo -n "-DreleaseVersion=${{ inputs.release_version }}" >> ${{ env.MAVEN_ARGS_FILE }}
+          echo "MAVEN_RELEASE_VERSION=${{ inputs.release_version }}" >> $GITHUB_ENV
+
+      - name: Set default input release version
+        if: inputs.release_version == 'auto'
         run: echo "MAVEN_RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed s/-SNAPSHOT//g)" >> $GITHUB_ENV
 
-      - name: Print Maven release version
-        run: echo "$MAVEN_RELEASE_VERSION"
+      - name: Set input development version
+        if: inputs.development_version != 'auto'
+        run: |
+          if [[ "${{ inputs.development_version}}" != *-SNAPSHOT ]]
+          then
+            echo "ERROR: Development version must end with -SNAPSHOT." 
+            exit 1
+          fi
+          echo " -DdevelopmentVersion=${{ inputs.development_version }}" >> ${{ env.MAVEN_ARGS_FILE }}
+        shell: bash
 
       - uses: webfactory/ssh-agent@v0.7.0
         with:
@@ -49,24 +91,48 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Configure Git User
+      - name: Get email
+        id: get_email
+        uses: evvanErb/get-github-email-by-username-action@v1.25
+        with:
+          github-username: ${{ github.actor }}
+
+      - name: Configure Git user
         run: |
-          git config user.email "jermccormick@gmail.com"
-          git config user.name "JeremyMcCormick"
+          git config user.email "${{ steps.get_email.outputs.email }}"
+          git config user.name "${{ github.actor }}"
+          echo "Username: ${{ github.actor }}"
+          echo "Email: ${{ steps.get_email.outputs.email }}"
+
+      - name: Set Maven quiet
+        if: inputs.quiet
+        run: echo -n " -q" >> ${{ env.MAVEN_ARGS_FILE }}
+
+      - name: Set Maven arguments variable
+        run: |
+          echo "Extra Maven args: $(cat ${{ env.MAVEN_ARGS_FILE }})"
+          echo "MAVEN_ARGS=$(cat ${{ env.MAVEN_ARGS_FILE }})" >> $GITHUB_ENV
 
       - name: Perform Maven release
-        run: mvn release:prepare release:perform -B -e -s .maven_settings.xml
+        run: |
+          mvn release:prepare release:perform \
+            -DdryRun=${{ inputs.dry_run }} \
+            -DskipTests=${{ inputs.skip_tests }} \
+            -Darguments="-DskipTests=${{ inputs.skip_tests }} -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }}" \
+            -B -e -s .maven_settings.xml \
+            ${{ env.MAVEN_ARGS }}
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
 
       - name: Make Github release
         id: github_release
+        if: ${{ !inputs.dry_run }}
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}
           name: ${{ github.event.repository.name }} ${{ env.MAVEN_RELEASE_VERSION }}
-          generate_release_notes: true
+          generate_release_notes: ${{ inputs.generate_release_notes }}
           draft: false
           prerelease: false
           files: |
