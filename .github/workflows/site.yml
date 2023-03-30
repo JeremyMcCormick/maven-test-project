@@ -7,12 +7,12 @@ on:
         description: "Tag to use for site deployment"
         required: true
         type: string
-  #workflow_dispatch:
-  #  inputs:
-  #    tag:
-  #      description: "Tag to use for site deployment"
-  #      required: true
-  #      type: string
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to use for site deployment"
+        required: true
+        type: string
 
 jobs:
   deploy-site:
