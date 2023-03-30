@@ -15,6 +15,21 @@ on:
         description: "New development version."
         required: true
         default: "auto"
+      dry_run:
+        description: "Perform a dry run which will not make an actual release."
+        required: false
+        type: boolean
+        default: false
+      skip_tests:
+        description: "Skip running the tests during the release."
+        required: false
+        type: boolean
+        default: false
+      skip_javadoc:
+        description: "Skip javadoc generation during the release."
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   release:
@@ -49,7 +64,7 @@ jobs:
         run: |
           if [[ "${{ inputs.development_version}}" != *-SNAPSHOT ]]
           then
-            echo "ERROR: Development version must end with -SNAPSHOT."  
+            echo "ERROR: Development version must end with -SNAPSHOT." 
             exit 1
           fi
           echo " -DdevelopmentVersion=${{ inputs.development_version }}" >> .maven_version
@@ -86,13 +101,21 @@ jobs:
           echo "MAVEN_ARGS=$(cat .maven_version)" >> $GITHUB_ENV
 
       - name: Perform Maven release
-        run: mvn release:prepare release:perform -B -e -s .maven_settings.xml ${{ env.MAVEN_ARGS }}
+        run: |
+          mvn release:prepare release:perform \
+            -DdryRun=${{ inputs.dry_run }} \
+            -DskipTests=${{ inputs.skip_tests }} -Darguments="-DskipTests=${{ inputs.skip_tests }} \
+            -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }}" \
+            -B -e -s .maven_settings.xml \
+            ${{ env.MAVEN_ARGS }}
+
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
 
       - name: Make Github release
         id: github_release
+        if: ! inputs.dry_run
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}
