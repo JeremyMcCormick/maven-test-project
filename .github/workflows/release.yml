@@ -150,10 +150,7 @@ jobs:
             ./target/${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}-bin.jar
 
   site:
-    runs-on: ubuntu-latest
     if: ${{ !needs.release.outputs.dry_run && needs.release.outputs.deploy_site }}
-    steps:
-      - name: Deploy site
-        uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml
-        with:
-          tag: ${{ needs.release.outputs.release_tag }}
+    uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml@main
+    with:
+      tag: ${{ needs.release.outputs.release_tag }}
