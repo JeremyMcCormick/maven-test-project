@@ -129,6 +129,7 @@ jobs:
             -DdryRun=${{ inputs.dry_run }} \
             -DskipTests=${{ inputs.skip_tests }} \
             -Darguments="-DskipTests=${{ inputs.skip_tests }} -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }}" \
+            -Dmaven.site.skip=true maven.site.deploy.skip=true \ 
             -B -e -s .maven_settings.xml \
             ${{ env.MAVEN_ARGS }}
           echo "release_tag=${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}" >> $GITHUB_OUTPUT
