@@ -5,5 +5,5 @@ id_rsa.pub
 .vscode
 *.log
 
-# This is used in github workflow for release versions.
-.maven_version
+# This file is used in the github workflow for managing Maven arguments.
+.maven_args
