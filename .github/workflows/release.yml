@@ -30,6 +30,16 @@ on:
         required: false
         type: boolean
         default: true
+      quiet:
+        description: "Quiet output - only show errors."
+        required: false
+        type: boolean
+        default: false
+      generate_release_notes:
+        description: "Whether to automatically generate release notes."
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   release:
@@ -46,13 +56,15 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
-      - name: Create version file
-        run: touch .maven_version
+      - name: Create Maven args file
+        run: |
+          touch .maven_args
+          echo "MAVEN_ARGS_FILE=.maven_args" >> $GITHUB_ENV
 
       - name: Set input release version
         if: inputs.release_version != 'auto'
         run: |
-          echo -n "-DreleaseVersion=${{ inputs.release_version }}" >> .maven_version
+          echo -n "-DreleaseVersion=${{ inputs.release_version }}" >> ${{ env.MAVEN_ARGS_FILE }}
           echo "MAVEN_RELEASE_VERSION=${{ inputs.release_version }}" >> $GITHUB_ENV
 
       - name: Set default input release version
@@ -67,11 +79,8 @@ jobs:
             echo "ERROR: Development version must end with -SNAPSHOT." 
             exit 1
           fi
-          echo " -DdevelopmentVersion=${{ inputs.development_version }}" >> .maven_version
+          echo " -DdevelopmentVersion=${{ inputs.development_version }}" >> ${{ env.MAVEN_ARGS_FILE }}
         shell: bash
-
-      - name: Print versions
-        run: cat .maven_version
 
       - uses: webfactory/ssh-agent@v0.7.0
         with:
@@ -95,17 +104,21 @@ jobs:
           echo "Username: ${{ github.actor }}"
           echo "Email: ${{ steps.get_email.outputs.email }}"
 
-      - name: Set Maven arguments
+      - name: Set Maven quiet
+        if: $ {{ inputs.quiet }}
+        run: echo -n " -q" >> ${{ env.MAVEN_ARGS_FILE }}
+
+      - name: Set Maven arguments variable
         run: |
-          cat .maven_version
-          echo "MAVEN_ARGS=$(cat .maven_version)" >> $GITHUB_ENV
+          echo "Extra Maven args: $(cat ${{ env.MAVEN_ARGS_FILE }})"
+          echo "MAVEN_ARGS=$(cat ${{ env.MAVEN_ARGS_FILE }})" >> $GITHUB_ENV
 
       - name: Perform Maven release
         run: |
           mvn release:prepare release:perform \
             -DdryRun=${{ inputs.dry_run }} \
-            -DskipTests=${{ inputs.skip_tests }} -Darguments="-DskipTests=${{ inputs.skip_tests }} \
-            -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }}" \
+            -DskipTests=${{ inputs.skip_tests }} \
+            -Darguments="-DskipTests=${{ inputs.skip_tests }} -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }}" \
             -B -e -s .maven_settings.xml \
             ${{ env.MAVEN_ARGS }}
         env:
@@ -119,7 +132,7 @@ jobs:
         with:
           tag_name: ${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}
           name: ${{ github.event.repository.name }} ${{ env.MAVEN_RELEASE_VERSION }}
-          generate_release_notes: true
+          generate_release_notes: ${{ inputs.generate_release_notes }}
           draft: false
           prerelease: false
           files: |
