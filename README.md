@@ -1,5 +1,9 @@
 # Maven Test Project
 
+## Maven Generated Site
+
+The Maven generated site for this project is (here on gh-pages)[https://jeremymccormick.github.io/maven-test-project/].
+
 ## Overview
 
 This project includes a workflow defined in `.github/workflows/release.yml` for releasing a Maven project using Github Actions. A release will be automatically triggered whenever a tag is pushed to the repository that looks like `"releases/**"`. An example tag name could be `releases/workshop2023`. The name of the tag is arbitrary and does not have to match the versions in Maven. The workflow will manage the versioning and release tags based on what is in the project's POM. A Maven release is performed and a Github release page is also created with automatically generated release notes. A tag is created in the repository for the release e.g. `maven-git-test-1.0.0`. The patch version in the project's `pom.xml` is automatically updated (1.0.0 -> 1.0.1-SNAPSHOT).
