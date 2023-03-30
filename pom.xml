@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>maven-test-project</artifactId>
   <groupId>org.hps</groupId>
-  <version>1.2.6-SNAPSHOT</version>
+  <version>1.1.4-SNAPSHOT</version>
   <url>https://github.com/JeremyMcCormick/maven-test-project</url>
   <description>This is an example Maven project including Github actions releasing, testing and site deployment.</description>
 
@@ -57,8 +55,7 @@
               <shadedArtifactAttached>true</shadedArtifactAttached>
               <shadedClassifierName>bin</shadedClassifierName>
               <transformers>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>com.hps.Hello</mainClass>
                 </transformer>
               </transformers>
@@ -82,13 +79,11 @@
           <scmBranch>gh-pages</scmBranch>
         </configuration>
       </plugin>
-      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>4.0.0-M6</version>
       </plugin>
-      -->
     </plugins>
   </build>
 
@@ -140,7 +135,6 @@
       <id>github</id>
       <url>scm:git:${project.scm.url}</url>
     </site>
-
   </distributionManagement>
 
 </project>
