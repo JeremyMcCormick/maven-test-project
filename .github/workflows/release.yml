@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "The branch to checkout when cutting the release."
+        description: "Branch to checkout when cutting the release."
         required: true
         default: "master"
       release_version:
@@ -23,7 +23,7 @@ jobs:
       - name: Check release version
         if: inputs.release_version != 'auto' && inputs.development_version == 'auto'
         run: |
-          echo "ERROR: If release version is not auto then next development version must also be provided."
+          echo "ERROR: Release version was provided but next development version was set to auto."
           exit 1
 
       - name: Checkout source code
@@ -47,7 +47,13 @@ jobs:
       - name: Set input development version
         if: inputs.development_version != 'auto'
         run: |
+          if [[ "${{ inputs.development_version}}" != *-SNAPSHOT ]]
+          then
+            echo "ERROR: Development version must end with -SNAPSHOT."  
+            exit 1
+          fi
           echo " -DdevelopmentVersion=${{ inputs.development_version }}" >> .maven_version
+        shell: bash
 
       - name: Print versions
         run: cat .maven_version
@@ -74,8 +80,13 @@ jobs:
           echo "Username: ${{ github.actor }}"
           echo "Email: ${{ steps.get_email.outputs.email }}"
 
+      - name: Set Maven arguments
+        run: |
+          cat .maven_version
+          echo "MAVEN_ARGS=$(cat .maven_version)" >> $GITHUB_ENV
+
       - name: Perform Maven release
-        run: mvn release:prepare release:perform -B -e -s .maven_settings.xml $(cat .maven_version)
+        run: mvn release:prepare release:perform -B -e -s .maven_settings.xml ${{ env.MAVEN_ARGS }}
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
