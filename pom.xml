@@ -82,11 +82,13 @@
           <scmBranch>gh-pages</scmBranch>
         </configuration>
       </plugin>
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>4.0.0-M6</version>
       </plugin>
+      -->
     </plugins>
   </build>
 
@@ -138,6 +140,7 @@
       <id>github</id>
       <url>scm:git:${project.scm.url}</url>
     </site>
+
   </distributionManagement>
 
 </project>
