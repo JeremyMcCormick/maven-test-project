@@ -105,7 +105,7 @@ jobs:
           echo "Email: ${{ steps.get_email.outputs.email }}"
 
       - name: Set Maven quiet
-        if: ${{ inputs.quiet }}
+        if: inputs.quiet
         run: echo -n " -q" >> ${{ env.MAVEN_ARGS_FILE }}
 
       - name: Set Maven arguments variable
