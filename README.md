@@ -2,7 +2,7 @@
 
 ## Maven Generated Site
 
-The Maven generated site for this project is (here on gh-pages)[https://jeremymccormick.github.io/maven-test-project/].
+The Maven generated site for this project is [here on gh-pages](https://jeremymccormick.github.io/maven-test-project/).
 
 ## Overview
 
