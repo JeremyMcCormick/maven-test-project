@@ -5,7 +5,7 @@
 
   <artifactId>maven-test-project</artifactId>
   <groupId>org.hps</groupId>
-  <version>1.2..0</version>
+  <version>1.0.26-SNAPSHOT</version>
 
   <scm>
     <url>git@github.com:JeremyMcCormick/maven-test-project.git</url>
