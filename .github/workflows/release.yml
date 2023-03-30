@@ -35,6 +35,11 @@ on:
         required: false
         type: boolean
         default: false
+      generate_release_notes:
+        description: "Generate release notes"
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   release:
@@ -100,7 +105,7 @@ jobs:
           echo "Email: ${{ steps.get_email.outputs.email }}"
 
       - name: Set Maven quiet
-        if: $ {{ inputs.quiet }}
+        if: ${{ inputs.quiet }}
         run: echo -n " -q" >> ${{ env.MAVEN_ARGS_FILE }}
 
       - name: Set Maven arguments variable
@@ -127,7 +132,7 @@ jobs:
         with:
           tag_name: ${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}
           name: ${{ github.event.repository.name }} ${{ env.MAVEN_RELEASE_VERSION }}
-          generate_release_notes: true
+          generate_release_notes: ${{ inputs.generate_release_notes }}
           draft: false
           prerelease: false
           files: |
