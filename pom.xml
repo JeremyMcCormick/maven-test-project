@@ -138,10 +138,12 @@
       <name>LCSIM Snapshots maven repository</name>
       <url>https://srs.slac.stanford.edu/nexus/content/repositories/lcsim-maven2-snapshot/</url>
     </snapshotRepository>
+    <!--
     <site>
       <id>github</id>
       <url>scm:git:${project.scm.url}</url>
     </site>
+    -->
   </distributionManagement>
 
 </project>
