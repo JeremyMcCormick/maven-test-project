@@ -55,18 +55,18 @@ jobs:
         with:
           java-version: 1.8
 
-      # - name: Get email
-      #   id: get_email
-      #   uses: evvanErb/get-github-email-by-username-action@v1.25
-      #   with:
-      #     github-username: ${{ github.actor }}
+      - name: Get email
+        id: get_email
+        uses: evvanErb/get-github-email-by-username-action@v1.25
+        with:
+          github-username: ${{ github.actor }}
 
-      # - name: Configure Git user
-      #   run: |
-      #     git config user.email "${{ steps.get_email.outputs.email }}"
-      #     git config user.name "${{ github.actor }}"
-      #     echo "Username: ${{ github.actor }}"
-      #     echo "Email: ${{ steps.get_email.outputs.email }}"
+      - name: Configure Git user
+        run: |
+          git config user.email "${{ steps.get_email.outputs.email }}"
+          git config user.name "${{ github.actor }}"
+          echo "Username: ${{ github.actor }}"
+          echo "Email: ${{ steps.get_email.outputs.email }}"
 
       - name: Perform Maven release
         run: mvn release:prepare release:perform -B -e -s .maven_settings.xml $(cat .maven_version)
