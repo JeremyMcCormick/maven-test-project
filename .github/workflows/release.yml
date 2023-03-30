@@ -40,10 +40,19 @@ on:
         required: false
         type: boolean
         default: true
+      deploy_site:
+        description: "Deploy the website for the release"
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      release_tag: ${{ steps.maven_release_step.outputs.release_tag }}
+      dry_run: ${{ inputs.dry_run }}
+      deploy_site: ${{ intputs.deploy_site }}
     steps:
       - name: Check release version
         if: inputs.release_version != 'auto' && inputs.development_version == 'auto'
@@ -114,6 +123,7 @@ jobs:
           echo "MAVEN_ARGS=$(cat ${{ env.MAVEN_ARGS_FILE }})" >> $GITHUB_ENV
 
       - name: Perform Maven release
+        id: maven_release_step
         run: |
           mvn release:prepare release:perform \
             -DdryRun=${{ inputs.dry_run }} \
@@ -121,12 +131,13 @@ jobs:
             -Darguments="-DskipTests=${{ inputs.skip_tests }} -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }}" \
             -B -e -s .maven_settings.xml \
             ${{ env.MAVEN_ARGS }}
+          echo "release_tag=${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}" >> $GITHUB_OUTPUT
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
 
       - name: Make Github release
-        id: github_release
+        id: github_release_step
         if: ${{ !inputs.dry_run }}
         uses: softprops/action-gh-release@v1
         with:
@@ -137,3 +148,12 @@ jobs:
           prerelease: false
           files: |
             ./target/${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}-bin.jar
+
+  site:
+    runs-on: ubuntu-latest
+    if: ${{ !needs.release.outputs.dry_run && needs.release.outputs.deploy_site }}
+    steps:
+      - name: Deploy site
+        uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml
+        with:
+          tag: ${{ needs.release.outputs.release_tag }}
