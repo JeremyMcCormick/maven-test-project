@@ -1,4 +1,4 @@
-name: Release
+name: release
 
 on:
   workflow_dispatch:
@@ -152,6 +152,6 @@ jobs:
 
   site:
     if: ${{ !needs.release.outputs.dry_run && needs.release.outputs.deploy_site }}
-    uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml@master
+    uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml@ghpages-support
     with:
       tag: ${{ needs.release.outputs.release_tag }}

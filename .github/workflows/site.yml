@@ -1,4 +1,4 @@
-name: Site
+name: site
 
 on:
   workflow_call:
