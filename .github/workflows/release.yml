@@ -4,29 +4,29 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Branch to checkout when cutting the release."
+        description: "Branch to use for release:"
         required: true
         default: "master"
       release_version:
-        description: "Release version."
+        description: "Release version:"
         required: true
         default: "auto"
       development_version:
-        description: "New development version."
+        description: "New development version:"
         required: true
         default: "auto"
       dry_run:
-        description: "Perform a dry run which will not make an actual release."
+        description: "Perform a dry run for testing."
         required: false
         type: boolean
         default: false
       skip_tests:
-        description: "Skip running the tests during the release."
+        description: "Skip running the tests."
         required: false
         type: boolean
         default: false
       skip_javadoc:
-        description: "Skip javadoc generation during the release."
+        description: "Skip javadoc generation."
         required: false
         type: boolean
         default: true
@@ -114,7 +114,7 @@ jobs:
 
       - name: Make Github release
         id: github_release
-        if: ! inputs.dry_run
+        if: ${{ !inputs.dry_run }}
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}
