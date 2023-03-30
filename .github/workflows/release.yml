@@ -108,7 +108,6 @@ jobs:
             -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }}" \
             -B -e -s .maven_settings.xml \
             ${{ env.MAVEN_ARGS }}
-
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
