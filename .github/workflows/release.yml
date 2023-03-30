@@ -1,4 +1,4 @@
-name: Release
+name: release
 
 on:
   workflow_dispatch:
@@ -118,8 +118,8 @@ jobs:
           mvn release:prepare release:perform \
             -DdryRun=${{ inputs.dry_run }} \
             -DskipTests=${{ inputs.skip_tests }} \
-            -Darguments="-DskipTests=${{ inputs.skip_tests }} -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }}" \
-            -Dmaven.site.skip=true -Dmaven.site.deploy.skip=true -DgenerateReports=false \
+            -Darguments="-DskipTests=${{ inputs.skip_tests }} -Dmaven.javadoc.skip=${{ inputs.skip_javadoc }} \
+            -Dmaven.site.skip=true -Dmaven.site.deploy.skip=true -DgenerateReports=false" \
             -B -e -s .maven_settings.xml \
             ${{ env.MAVEN_ARGS }}
         env:
