@@ -8,11 +8,11 @@ on:
         required: true
         default: "master"
       release_version:
-        description: "Default version to use when preparing a release."
+        description: "Release version."
         required: true
         default: "auto"
       development_version:
-        description: "Default version to use for new local working copy."
+        description: "New development version."
         required: true
         default: "auto"
 
@@ -43,6 +43,9 @@ jobs:
         run: |
           echo " -DdevelopmentVersion=${{ inputs.development_version }}" >> .maven_version
 
+      - name: Print versions
+        run: cat .maven_version
+
       - uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -52,18 +55,18 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Get email
-        id: get_email
-        uses: evvanErb/get-github-email-by-username-action@v1.25
-        with:
-          github-username: ${{ github.actor }}
+      # - name: Get email
+      #   id: get_email
+      #   uses: evvanErb/get-github-email-by-username-action@v1.25
+      #   with:
+      #     github-username: ${{ github.actor }}
 
-      - name: Configure Git user
-        run: |
-          git config user.email "${{ steps.get_email.outputs.email }}"
-          git config user.name "${{ github.actor }}"
-          echo "Username: ${{ github.actor }}"
-          echo "Email: ${{ steps.get_email.outputs.email }}"
+      # - name: Configure Git user
+      #   run: |
+      #     git config user.email "${{ steps.get_email.outputs.email }}"
+      #     git config user.name "${{ github.actor }}"
+      #     echo "Username: ${{ github.actor }}"
+      #     echo "Email: ${{ steps.get_email.outputs.email }}"
 
       - name: Perform Maven release
         run: mvn release:prepare release:perform -B -e -s .maven_settings.xml $(cat .maven_version)
