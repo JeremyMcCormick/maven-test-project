@@ -41,7 +41,7 @@ jobs:
       - name: Set input development version
         if: inputs.development_version != 'auto'
         run: |
-          echo "-DdevelopmentVersion=${{ inputs.development_version }}" >> .maven_version
+          echo " -DdevelopmentVersion=${{ inputs.development_version }}" >> .maven_version
 
       - uses: webfactory/ssh-agent@v0.7.0
         with:
