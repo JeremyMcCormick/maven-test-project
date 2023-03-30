@@ -151,6 +151,6 @@ jobs:
 
   site:
     if: ${{ !needs.release.outputs.dry_run && needs.release.outputs.deploy_site }}
-    uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml@main
+    uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml@master
     with:
       tag: ${{ needs.release.outputs.release_tag }}
