@@ -153,12 +153,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ !needs.release.outputs.dry_run && needs.release.outputs.deploy_site }}
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ needs.release.outputs.release_tag }}
-
       - name: Deploy site
-        uses: .github/workflows/site.yml
+        uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml
         with:
           tag: ${{ needs.release.outputs.release_tag }}
