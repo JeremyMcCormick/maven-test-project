@@ -52,7 +52,7 @@ jobs:
     outputs:
       release_tag: ${{ steps.maven_release_step.outputs.release_tag }}
       dry_run: ${{ inputs.dry_run }}
-      deploy_site: ${{ intputs.deploy_site }}
+      deploy_site: ${{ inputs.deploy_site }}
     steps:
       - name: Check release version
         if: inputs.release_version != 'auto' && inputs.development_version == 'auto'
