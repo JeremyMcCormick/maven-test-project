@@ -79,17 +79,14 @@
           <scmBranch>gh-pages</scmBranch>
         </configuration>
       </plugin>
-      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>4.0.0-M6</version>
       </plugin>
-      -->
     </plugins>
   </build>
 
-  <!--
   <reporting>
     <plugins>
       <plugin>
@@ -122,7 +119,6 @@
       </plugin>
     </plugins>
   </reporting>
-  -->
 
   <distributionManagement>
     <repository>
@@ -135,12 +131,10 @@
       <name>LCSIM Snapshots maven repository</name>
       <url>https://srs.slac.stanford.edu/nexus/content/repositories/lcsim-maven2-snapshot/</url>
     </snapshotRepository>
-    <!--
     <site>
       <id>github</id>
       <url>scm:git:${project.scm.url}</url>
     </site>
-    -->
   </distributionManagement>
 
 </project>
