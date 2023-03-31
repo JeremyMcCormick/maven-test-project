@@ -45,8 +45,16 @@ on:
         required: false
         type: boolean
         default: false
+    secrets:
+      SSH_PRIVATE_KEY:
+        required: true
+      CI_DEPLOY_USERNAME:
+        required: true
+      CI_DEPLOY_PASSWORD:
+        required: true
 
 jobs:
+  # TODO: Add test here for a sanity check
   release:
     runs-on: ubuntu-latest
     outputs:
@@ -153,3 +161,4 @@ jobs:
     uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml@master
     with:
       tag: ${{ needs.release.outputs.release_tag }}
+    secrets: inherit
