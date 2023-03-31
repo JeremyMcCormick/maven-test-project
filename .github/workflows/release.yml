@@ -40,10 +40,25 @@ on:
         required: false
         type: boolean
         default: true
+      deploy_site:
+        description: "Update the project website"
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      SSH_PRIVATE_KEY:
+        required: true
+      CI_DEPLOY_USERNAME:
+        required: true
+      CI_DEPLOY_PASSWORD:
+        required: true
 
 jobs:
+  # TODO: Add test here for a sanity check
   release:
     runs-on: ubuntu-latest
+    outputs:
+      release_tag: ${{ steps.maven_release_step.outputs.release_tag }}
     steps:
       - name: Check release version
         if: inputs.release_version != 'auto' && inputs.development_version == 'auto'
@@ -114,6 +129,7 @@ jobs:
           echo "MAVEN_ARGS=$(cat ${{ env.MAVEN_ARGS_FILE }})" >> $GITHUB_ENV
 
       - name: Perform Maven release
+        id: maven_release_step
         run: |
           mvn release:prepare release:perform \
             -DdryRun=${{ inputs.dry_run }} \
@@ -122,6 +138,7 @@ jobs:
             -Dmaven.site.skip=true -Dmaven.site.deploy.skip=true -DgenerateReports=false" \
             -B -e -s .maven_settings.xml \
             ${{ env.MAVEN_ARGS }}
+          echo "release_tag=${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}" >> $GITHUB_OUTPUT
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
@@ -138,3 +155,10 @@ jobs:
           prerelease: false
           files: |
             ./target/${{ github.event.repository.name }}-${{ env.MAVEN_RELEASE_VERSION }}-bin.jar
+  site:
+    needs: release
+    if: ${{ !inputs.dry_run && inputs.deploy_site }}
+    uses: JeremyMcCormick/maven-test-project/.github/workflows/site.yml@master
+    with:
+      tag: ${{ needs.release.outputs.release_tag }}
+    secrets: inherit
