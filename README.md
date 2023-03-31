@@ -86,4 +86,4 @@ There is also a workflow called "test" which can be used to checkout any branch 
 
 - Add a Slack integration that pushes a message when releases are performed or master is updated.
 - Add a workflow for deploying the JARs for the current development release manually as in [this project](https://github.com/wocommunity/wonder/tree/master/.github/workflows)
-- Improve the management of the Maven release versions by using functionality in [this plugin](https://www.mojohaus.org/versions/versions-maven-plugin/index.html)
+- Improve the management of the Maven release versions by using functionality in [this plugin](https://www.mojohaus.org/build-helper-maven-plugin/parse-version-mojo.html)
