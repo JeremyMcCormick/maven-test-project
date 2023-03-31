@@ -82,7 +82,7 @@ The repository credentials are passed to Maven via configuration in the file `.m
 
 The [test workflow](https://github.com/JeremyMcCormick/maven-test-project/actions/workflows/test.yml) can be used to checkout a branch, by default the current `master`, build the project, and run the tests.
 
-The [site workflow](https://github.com/JeremyMcCormick/maven-test-project/actions/workflows/site.yml) can be used to build and deploy the project website without performing a release.
+The [site workflow](https://github.com/JeremyMcCormick/maven-test-project/actions/workflows/site.yml) builds and deploy the project website from a tag without needing to perform a release. (Only tags can be used to deploy the website, not branches.)
 
 ## TODO List
 
