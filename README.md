@@ -22,17 +22,7 @@ The release procedure will perform the following steps:
 
 The release can be performed by a project collaborator who has admin privileges on the repository.
 
-A Maven release is performed and a Github release page is also created with automatically generated release notes. A tag is created in the repository for the release e.g. `maven-git-test-1.0.0`. The patch version in the project's `pom.xml` is automatically updated (1.0.0 -> 1.0.1-SNAPSHOT).
-
-The bin jar file should be uploaded to Nexus and accessible via a public URL like:
-
-```
-https://srs.slac.stanford.edu/nexus/repository/lcsim-maven2-releases/org/hps/maven-test-project/1.0.2/maven-test-project-1.0.2-bin.jar
-```
-
-The bin jar is also attached to the Github release page as an artifact, along with the source code.
-
-An example release can be found [here](https://github.com/JeremyMcCormick/maven-test-project/releases/tag/maven-test-project-1.0.15).
+A tag is created in the repository for the release e.g. `maven-git-test-1.0.0`. The patch version in the project's `pom.xml` is automatically updated (1.0.0 -> 1.0.1-SNAPSHOT). The bin jar file will be uploaded to Nexus and should then be accessible via a public URL like [this](https://srs.slac.stanford.edu/nexus/repository/lcsim-maven2-releases/org/hps/maven-test-project/1.0.2/maven-test-project-1.0.2-bin.jar). The bin jar is also attached to the Github release page as an artifact, along with the source code. An example Github release can be found [here](https://github.com/JeremyMcCormick/maven-test-project/releases/tag/maven-test-project-1.0.15).
 
 ## Release Options
 
