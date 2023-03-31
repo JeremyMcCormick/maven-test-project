@@ -37,7 +37,7 @@ The workflow supports a number of input arguments, including the following:
 | skip_tests | skip running the project tests during the release | false | |
 | skip_javadoc | skip generation of the project's javadoc | true | |
 | generate_release_notes | automatically generate release notes for the Github release | true | |
-| deploy_site | update the project's website on gh-pages after making the release | true | |
+| deploy_site | update the project's website on gh-pages after making the release | false | |
 
 ## Configuration
 
