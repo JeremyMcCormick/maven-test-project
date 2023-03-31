@@ -87,5 +87,7 @@ The [site workflow](https://github.com/JeremyMcCormick/maven-test-project/action
 ## TODO List
 
 - Add a workflow for deploying the JARs for the current development release manually as in [this project](https://github.com/wocommunity/wonder/tree/master/.github/workflows)
+- Run the (above) deploy workflow when master is updated
+- Run the test workflow as a prerequisite for PR approval (tests must pass)
 - Add a Slack integration that pushes a message when releases are performed or PRs are merged
 - Cleanup the management of the Maven release versions within the release workflow by using functionality in [this plugin](https://www.mojohaus.org/build-helper-maven-plugin/parse-version-mojo.html)
