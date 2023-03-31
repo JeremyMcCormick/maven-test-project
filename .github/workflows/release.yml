@@ -44,7 +44,7 @@ on:
         description: "Update the project website"
         required: false
         type: boolean
-        default: false
+        default: true
     secrets:
       SSH_PRIVATE_KEY:
         required: true
