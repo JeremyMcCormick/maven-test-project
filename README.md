@@ -38,6 +38,7 @@ The workflow supports a number of input arguments, including the following:
 | skip_javadoc | skip generation of the project's javadoc | true | |
 | generate_release_notes | automatically generate release notes for the Github release | true | |
 | deploy_site | update the project's website on gh-pages after making the release | true | |
+| quiet | suppress Maven output and only print errors | false | |
 
 ## Configuration
 
@@ -79,9 +80,12 @@ The repository credentials are passed to Maven via configuration in the file `.m
 
 ## Additional Workflows
 
-There is also a workflow called "test" which can be used to checkout any branch of the project and run the tests.
+The [test workflow](https://github.com/JeremyMcCormick/maven-test-project/actions/workflows/test.yml) can be used to checkout a branch, by default the current `master`, build the project, and run the tests.
+
+The [site workflow](https://github.com/JeremyMcCormick/maven-test-project/actions/workflows/site.yml) builds and deploy the project website from a tag without needing to perform a release. (Only tags can be used to deploy the website, not branches.)
 
 ## TODO List
 
-- Add a Slack integration that pushes a message when releases are performed or master is updated.
 - Add a workflow for deploying the JARs for the current development release manually as in [this project](https://github.com/wocommunity/wonder/tree/master/.github/workflows)
+- Add a Slack integration that pushes a message when releases are performed or PRs are merged
+- Cleanup the management of the Maven release versions within the release workflow by using functionality in [this plugin](https://www.mojohaus.org/build-helper-maven-plugin/parse-version-mojo.html)
