@@ -6,7 +6,7 @@ on:
       - master
     # Ignore release tags
     tags-ignore:
-      - ${{ github.event.repository.name }}-*
+      - maven-test-project-*
 
 jobs:
   deploy:
