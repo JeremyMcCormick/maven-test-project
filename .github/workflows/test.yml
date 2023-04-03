@@ -1,9 +1,6 @@
 name: test
 
 on:
-  # FIXME: Is this needed since the workflow must pass for the PR?
-  push:
-    branches: [master]
   pull_request:
     branches: [master]
 
