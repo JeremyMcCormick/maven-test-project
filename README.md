@@ -91,3 +91,16 @@ The [site workflow](https://github.com/JeremyMcCormick/maven-test-project/action
 - Run the test workflow as a prerequisite for PR approval (tests must pass)
 - Add a Slack integration that pushes a message when releases are performed or PRs are merged
 - Cleanup the management of the Maven release versions within the release workflow by using functionality in [this plugin](https://www.mojohaus.org/build-helper-maven-plugin/parse-version-mojo.html)
+- Add caching of Maven repo like:
+
+```
+- name: Cache Maven Dependencies
+  uses: actions/cache@v1
+  with:
+    path: ~/.m2 # maven dependencies are stored in `~/.m2` on Linux
+    key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+    restore-keys: |
+      ${{ runner.os }}-build-${{ env.cache-name }}-
+      ${{ runner.os }}-build-
+      ${{ runner.os }}-
+```
