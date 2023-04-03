@@ -30,8 +30,6 @@ jobs:
             exit 1
           fi
 
-      # FIXME: The next 4 steps are duplicated from release.yml and could be put
-      # into a separate action.
       - uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
