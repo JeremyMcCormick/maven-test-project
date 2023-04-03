@@ -71,16 +71,6 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
       - name: Create Maven args file
         run: |
           touch .maven_args

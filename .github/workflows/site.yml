@@ -39,16 +39,6 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
       - name: Get email
         id: get_email
         uses: evvanErb/get-github-email-by-username-action@v1.25
